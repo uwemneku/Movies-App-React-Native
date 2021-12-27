@@ -1,10 +1,8 @@
-import {
-  BottomTabNavigationProp,
-  BottomTabScreenProps,
-} from "@react-navigation/bottom-tabs";
+import { Ionicons } from "@expo/vector-icons";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   FlatList,
   FlatListProps,
@@ -13,61 +11,30 @@ import {
   Text,
   View,
 } from "react-native";
-import {
-  PanGestureHandler,
-  PanGestureHandlerGestureEvent,
-} from "react-native-gesture-handler";
 import Animated, {
-  runOnJS,
-  useAnimatedGestureHandler,
   useAnimatedScrollHandler,
-  useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { BottomTabParamList, RootParamList } from "../../../Navigation/types";
-import { NewBooks, PopularBooks } from "./components";
+import { FAB, NewBooks, PopularBooks } from "./components";
 
 type Props = CompositeScreenProps<
   StackScreenProps<RootParamList>,
   BottomTabScreenProps<BottomTabParamList>
 >;
+
 const AnimatedFlatList =
   Animated.createAnimatedComponent<FlatListProps<number>>(FlatList);
 
 const Home = ({ navigation }: Props) => {
+  const [popularBooks, setPopularBooks] = useState([1, 2, 3, 4, 5, 6, 7]);
+
   const scrollY = useSharedValue(0);
   const scrollRef = useRef<FlatList>(null);
-  const [isPanGestureActive, setIsPanGestureActive] = useState(true);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    margin: 0,
-    marginTop: -scrollY.value,
-  }));
-
-  useEffect(() => {
-    console.log("scrollY.value", scrollY.value);
-
-    scrollY.value > 360 && setIsPanGestureActive(false);
-  }, [scrollY.value]);
-
-  const gestureHandler = useAnimatedGestureHandler<
-    PanGestureHandlerGestureEvent,
-    { start: number }
-  >({
-    onStart: ({}, ctx) => {
-      ctx.start = scrollY.value;
-    },
-    onActive: ({ translationY }, ctx) => {
-      scrollY.value = ctx.start - translationY;
-      scrollY.value > 360 && runOnJS(setIsPanGestureActive)(false);
-      // console.log(ctx.start - translationY);
-    },
-  });
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: ({ contentOffset }) => {
-      // scrollY.value = contentOffset.y;
+      scrollY.value = contentOffset.y;
     },
   });
   return (
@@ -91,34 +58,49 @@ const Home = ({ navigation }: Props) => {
       </View>
 
       <View style={{ flex: 1 }}>
-        <Animated.View style={animatedStyle}>
-          <Text style={styles.heading}>Popular Books</Text>
-          <FlatList
-            data={[1, 2, 3, 4, 5, 6]}
-            renderItem={({ item }) => <PopularBooks />}
+        <View style={{ flex: 1 }}>
+          <AnimatedFlatList
+            ListHeaderComponent={() => (
+              <View>
+                <Text style={styles.heading}>Popular Books</Text>
+                <FlatList
+                  data={popularBooks}
+                  renderItem={({ item, index }) => (
+                    <PopularBooks {...{ index }} />
+                  )}
+                  ListEmptyComponent={() => (
+                    <View style={{ flexDirection: "row" }}>
+                      {[1, 2, 3, 4].map((item, index) => (
+                        <PopularBooks key={index} loading />
+                      ))}
+                    </View>
+                  )}
+                  keyExtractor={(item) => item.toString()}
+                  horizontal={true}
+                  ItemSeparatorComponent={() => <View style={{ width: 30 }} />}
+                  snapToInterval={156}
+                  showsHorizontalScrollIndicator={false}
+                />
+                <Text style={styles.heading}>New Books</Text>
+              </View>
+            )}
+            ref={scrollRef}
+            data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 12]}
+            renderItem={({ item }) => <NewBooks />}
             keyExtractor={(item) => item.toString()}
-            horizontal={true}
-            ItemSeparatorComponent={() => <View style={{ width: 30 }} />}
-            snapToInterval={156}
+            ItemSeparatorComponent={() => <View style={{ height: 30 }} />}
+            onScroll={scrollHandler}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 300 }}
           />
-        </Animated.View>
-        <PanGestureHandler
-          onGestureEvent={gestureHandler}
-          enabled={isPanGestureActive}
-        >
-          <Animated.View style={{ flex: 1 }}>
-            <Text style={styles.heading}>New Books</Text>
-            <AnimatedFlatList
-              ref={scrollRef}
-              data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 12]}
-              renderItem={({ item }) => <NewBooks />}
-              keyExtractor={(item) => item.toString()}
-              onScroll={scrollHandler}
-              ItemSeparatorComponent={() => <View style={{ height: 30 }} />}
-            />
-          </Animated.View>
-        </PanGestureHandler>
+        </View>
       </View>
+      <FAB
+        {...{ scrollY }}
+        onPress={() => {
+          scrollRef.current?.scrollToOffset({ offset: 0, animated: true });
+        }}
+      />
     </SafeAreaView>
   );
 };
@@ -128,7 +110,6 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
-    // backgroundColor: "red",
     flex: 1,
   },
   header: {

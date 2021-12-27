@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { Bookmarks, Cart, Home, Settings } from "../Screens";
 import { BottomTabParamList } from "./types";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { Ionicons } from "@expo/vector-icons";
 
 const { Navigator, Screen } = createBottomTabNavigator<BottomTabParamList>();
 const BottomTabNavigator = () => {
@@ -47,7 +47,15 @@ const TabBar = ({ navigation, state }: BottomTabBarProps) => {
           return (
             <Pressable key={route.name} {...{ onPress }}>
               <Ionicons
-                name={icons[index]}
+                name={
+                  index === 0
+                    ? "home-outline"
+                    : index === 1
+                    ? "bookmark-outline"
+                    : index === 2
+                    ? "cart-outline"
+                    : "settings-outline"
+                }
                 size={30}
                 color={"black"}
                 style={{ opacity: isFocused ? 1 : 0.2 }}

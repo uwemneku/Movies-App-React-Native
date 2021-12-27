@@ -2,7 +2,7 @@ import { NavigatorScreenParams } from "@react-navigation/native"
 
 export type RootParamList = {
     main: NavigatorScreenParams<BottomTabParamList>
-    bookDetails: {image: string; id: string} 
+    bookDetails: {image: string; id: number} 
     search: undefined
 }
 

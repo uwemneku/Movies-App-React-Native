@@ -1,19 +1,42 @@
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import {
+  CompositeNavigationProp,
+  useNavigation,
+} from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { SharedElement } from "react-navigation-shared-element";
+import {
+  BottomTabParamList,
+  RootParamList,
+} from "../../../../Navigation/types";
 
-const PopularBooks = () => {
+type HomeScreenNavigationProps = CompositeNavigationProp<
+  StackNavigationProp<RootParamList, "main">,
+  BottomTabNavigationProp<BottomTabParamList>
+>;
+interface Props {
+  index: number;
+}
+const PopularBooks = ({ index: id }: Props) => {
+  const navigation = useNavigation<HomeScreenNavigationProps>();
+  const handleNavigation = () =>
+    navigation.navigate("bookDetails", { image: "", id });
   return (
-    <View>
-      <Image
-        source={require("../../../../../assets/bigBook.png")}
-        width={126}
-        height={192}
-        resizeMethod="auto"
-        resizeMode="contain"
-      />
+    <Pressable onPress={handleNavigation}>
+      <SharedElement id={`image-${id}`}>
+        <Image
+          source={require("../../../../../assets/bigBook.png")}
+          width={126}
+          height={192}
+          resizeMethod="auto"
+          resizeMode="contain"
+        />
+      </SharedElement>
       <Text style={styles.heading}>Fashionopolis</Text>
       <Text>Dana Thomas</Text>
-    </View>
+    </Pressable>
   );
 };
 

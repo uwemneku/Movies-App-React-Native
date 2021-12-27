@@ -11,7 +11,13 @@ const StackNavigator = () => {
   return (
     <Navigator initialRouteName="main" screenOptions={{ headerShown: false }}>
       <Screen name="main" component={BottomTabNavigator} />
-      <Screen name="bookDetails" component={BookDetails} />
+      <Screen
+        name="bookDetails"
+        component={BookDetails}
+        sharedElements={({ params }) => [
+          { id: `image-${params.id}`, animation: "fade" },
+        ]}
+      />
       <Screen name="search" component={Search} />
     </Navigator>
   );
