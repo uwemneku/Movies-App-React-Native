@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
-import { BookDetails } from "../Screens";
+import { BookDetails, Search } from "../Screens";
 import BottomTabNavigator from "./BottomTabNavigator";
 import { RootParamList } from "./types";
 
@@ -12,6 +12,7 @@ const StackNavigator = () => {
     <Navigator initialRouteName="main" screenOptions={{ headerShown: false }}>
       <Screen name="main" component={BottomTabNavigator} />
       <Screen name="bookDetails" component={BookDetails} />
+      <Screen name="search" component={Search} />
     </Navigator>
   );
 };
