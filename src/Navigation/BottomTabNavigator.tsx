@@ -49,12 +49,12 @@ const TabBar = ({ navigation, state }: BottomTabBarProps) => {
   const { isTabBarVisible } = useTabBarContext();
   const bottomY = useSharedValue(0);
   const animatedStyle = useAnimatedStyle(() => ({
-    bottom: withSpring(bottomY.value),
+    bottom: withSpring(isTabBarVisible.value ? 0 : -100),
   }));
 
-  useEffect(() => {
-    bottomY.value = isTabBarVisible ? 0 : -100;
-  }, [isTabBarVisible]);
+  // useEffect(() => {
+  //   bottomY.value = isTabBarVisible ? 0 : -100;
+  // }, [isTabBarVisible]);
 
   return (
     <Animated.View style={[styles.container, animatedStyle]}>

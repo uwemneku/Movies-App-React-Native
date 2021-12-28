@@ -15,16 +15,16 @@ type BookDetailsScreenProps = StackScreenProps<
 const BookDetails = ({ navigation, route }: BookDetailsScreenProps) => {
   const { id, image } = route.params;
 
-  const { setIsTabBarVisible } = useTabBarContext();
+  const { isTabBarVisible } = useTabBarContext();
 
   useFocusEffect(
     useCallback(() => {
-      setIsTabBarVisible(false);
+      isTabBarVisible.value = false;
     }, [])
   );
 
   useEffect(() => {
-    const showTabBar = () => setIsTabBarVisible(true);
+    const showTabBar = () => (isTabBarVisible.value = true);
     navigation.addListener("beforeRemove", showTabBar);
 
     return () => {
