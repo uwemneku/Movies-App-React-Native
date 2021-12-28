@@ -1,23 +1,16 @@
-import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import React, { useEffect, useRef } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { createSharedElementStackNavigator } from "react-navigation-shared-element";
-import { BookDetails, Search } from "../Screens";
+import { Search } from "../Screens";
 import BottomTabNavigator from "./BottomTabNavigator";
 import { RootParamList } from "./types";
 
-const { Navigator, Screen } =
-  createSharedElementStackNavigator<RootParamList>();
+const { Navigator, Screen } = createStackNavigator<RootParamList>();
+
 const StackNavigator = () => {
   return (
-    <Navigator initialRouteName="main" screenOptions={{ headerShown: false }}>
+    <Navigator screenOptions={{ headerShown: false }}>
       <Screen name="main" component={BottomTabNavigator} />
-      <Screen
-        name="bookDetails"
-        component={BookDetails}
-        sharedElements={({ params }) => [
-          { id: `image-${params.id}`, animation: "fade" },
-        ]}
-      />
       <Screen name="search" component={Search} />
     </Navigator>
   );

@@ -3,18 +3,24 @@ import {
   CompositeNavigationProp,
   useNavigation,
 } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import React from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { SharedElement } from "react-navigation-shared-element";
 import {
   BottomTabParamList,
   RootParamList,
+  SharedScreenParamList,
 } from "../../../../Navigation/types";
 
-type HomeScreenNavigationProps = CompositeNavigationProp<
-  StackNavigationProp<RootParamList, "main">,
-  BottomTabNavigationProp<BottomTabParamList>
+// type HomeScreenNavigationProps = CompositeNavigationProp<
+//   StackNavigationProp<RootParamList, "main">,
+//   BottomTabNavigationProp<BottomTabParamList>
+// >;
+
+type HomeScreenNavigationProps = StackNavigationProp<
+  SharedScreenParamList,
+  "Home"
 >;
 interface Props {
   index: number;

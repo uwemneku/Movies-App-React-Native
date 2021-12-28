@@ -1,26 +1,53 @@
+import { useFocusEffect } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { SharedElement } from "react-navigation-shared-element";
-import { RootParamList } from "../../Navigation/types";
+import { useTabBarContext } from "../../../Context/BottomTabBar/Context";
+import { RootParamList, SharedScreenParamList } from "../../Navigation/types";
 
-type BookDetailsScreenProps = StackScreenProps<RootParamList, "bookDetails">;
+type BookDetailsScreenProps = StackScreenProps<
+  SharedScreenParamList,
+  "bookDetails"
+>;
 
 const BookDetails = ({ navigation, route }: BookDetailsScreenProps) => {
   const { id, image } = route.params;
+
+  const { setIsTabBarVisible } = useTabBarContext();
+
+  useFocusEffect(
+    useCallback(() => {
+      setIsTabBarVisible(false);
+    }, [])
+  );
+
+  useEffect(() => {
+    const showTabBar = () => setIsTabBarVisible(true);
+    navigation.addListener("beforeRemove", showTabBar);
+
+    return () => {
+      navigation.removeListener("beforeRemove", showTabBar);
+    };
+  }, []);
+
   return (
-    <View>
-      <Text></Text>
+    <SafeAreaView>
+      <Text>ddd</Text>
       <SharedElement id={`image-${id}`}>
-        <Image
-          source={require("../../../assets/bigBook.png")}
-          width={126}
-          height={192}
-          resizeMethod="auto"
-          resizeMode="contain"
-        />
+        <View>
+          <Image
+            source={require("../../../assets/bigBook.png")}
+            width={10}
+            height={10}
+            resizeMode="cover"
+            style={{ backgroundColor: "red", width: 211, height: 310 }}
+          />
+        </View>
       </SharedElement>
-    </View>
+      <Text style={styles.heading}>Fashionopolis</Text>
+    </SafeAreaView>
   );
 };
 

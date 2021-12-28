@@ -2,12 +2,15 @@ import { NavigatorScreenParams } from "@react-navigation/native"
 
 export type RootParamList = {
     main: NavigatorScreenParams<BottomTabParamList>
-    bookDetails: {image: string; id: number} 
     search: undefined
 }
 
-export type BottomTabParamList = {
+export type SharedScreenParamList = {
+    bookDetails: {image: string; id: number}
     Home: undefined;
+}
+export type BottomTabParamList = {
+    BottomTabHome: NavigatorScreenParams<SharedScreenParamList>
     Settings: undefined;
     Cart: undefined;
     Bookmarks: undefined;

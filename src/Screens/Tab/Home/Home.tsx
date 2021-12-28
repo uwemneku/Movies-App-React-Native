@@ -71,7 +71,7 @@ const Home = ({ navigation }: Props) => {
                   ListEmptyComponent={() => (
                     <View style={{ flexDirection: "row" }}>
                       {[1, 2, 3, 4].map((item, index) => (
-                        <PopularBooks key={index} loading />
+                        <PopularBooks key={index} />
                       ))}
                     </View>
                   )}
