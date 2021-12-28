@@ -6,7 +6,7 @@ export type RootParamList = {
 }
 
 export type SharedScreenParamList = {
-    bookDetails: {image: string; id: number}
+    bookDetails: {image: string; id: number, Director: string, title: string, description: string, rating: string}
     Home: undefined;
 }
 export type BottomTabParamList = {

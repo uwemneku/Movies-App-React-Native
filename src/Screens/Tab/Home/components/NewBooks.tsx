@@ -9,11 +9,18 @@ const NewBooks = () => {
   return (
     <View style={styles.container}>
       <Image
-        source={require("../../../../../assets/smallBook.png")}
+        // source={require("../../../../../assets/smallBook.png")}
+        source={{
+          uri: "https://m.media-amazon.com/images/M/MV5BNDYxNjQyMjAtNTdiOS00NGYwLWFmNTAtNThmYjU5ZGI2YTI1XkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SX300.jpg",
+        }}
         width={126}
         height={192}
         resizeMethod="auto"
-        resizeMode="contain"
+        resizeMode="cover"
+        style={{ width: 126, height: 162 }}
+        onLoad={(E) => {
+          console.log(E.nativeEvent.source.height);
+        }}
       />
       <View style={{ flex: 1, margin: 10 }}>
         <Text style={styles.heading}>Fashionopolis</Text>

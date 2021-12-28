@@ -8,8 +8,8 @@ import { Bookmarks, Cart, Settings } from "../Screens";
 import { BottomTabParamList } from "./types";
 import { Ionicons } from "@expo/vector-icons";
 import SharedElementStackNavigator from "./SharedElementStackNavigator";
-import { TabBarVisibilityProvider } from "../../Context";
-import { useTabBarContext } from "../../Context/BottomTabBarVisibility/Context";
+import { TabBarVisibilityProvider } from "../Context";
+import { useTabBarContext } from "../Context/BottomTabBarVisibility/Context";
 import Animated, {
   useAnimatedStyle,
   withSpring,

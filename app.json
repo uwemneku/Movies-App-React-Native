@@ -1,10 +1,12 @@
 {
   "expo": {
-    "name": "Book-store",
-    "slug": "Book-store",
+    "name": "Wintinkin-Movies",
+    "slug": "Wintinkin-Movies",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
+    "primaryColor": "#2F80ED",
     "icon": "./assets/icon.png",
+    "githubUrl": "https://github.com/uwemneku/Book-store-React-Native",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -17,7 +19,7 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false
     },
     "android": {
       "adaptiveIcon": {
