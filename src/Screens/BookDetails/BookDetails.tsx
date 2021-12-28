@@ -4,7 +4,7 @@ import React, { useCallback, useEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SharedElement } from "react-navigation-shared-element";
-import { useTabBarContext } from "../../../Context/BottomTabBar/Context";
+import { useTabBarContext } from "../../../Context/BottomTabBarVisibility/Context";
 import { RootParamList, SharedScreenParamList } from "../../Navigation/types";
 
 type BookDetailsScreenProps = StackScreenProps<

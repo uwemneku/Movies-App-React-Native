@@ -1,1 +1,1 @@
-export * from './BottomTabBar'
+export * from './BottomTabBarVisibility'

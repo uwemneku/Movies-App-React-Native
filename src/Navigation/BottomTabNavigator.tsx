@@ -2,31 +2,23 @@ import {
   BottomTabBarProps,
   createBottomTabNavigator,
 } from "@react-navigation/bottom-tabs";
-import React, { useEffect, useRef } from "react";
-import {
-  Dimensions,
-  Pressable,
-  StyleSheet,
-  Text,
-  useWindowDimensions,
-  View,
-} from "react-native";
-import { Bookmarks, Cart, Home, Settings } from "../Screens";
+import React from "react";
+import { Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
+import { Bookmarks, Cart, Settings } from "../Screens";
 import { BottomTabParamList } from "./types";
 import { Ionicons } from "@expo/vector-icons";
 import SharedElementStackNavigator from "./SharedElementStackNavigator";
-import { BottomTabTBarProvider } from "../../Context";
-import { useTabBarContext } from "../../Context/BottomTabBar/Context";
+import { TabBarVisibilityProvider } from "../../Context";
+import { useTabBarContext } from "../../Context/BottomTabBarVisibility/Context";
 import Animated, {
   useAnimatedStyle,
-  useSharedValue,
   withSpring,
 } from "react-native-reanimated";
 
 const { Navigator, Screen } = createBottomTabNavigator<BottomTabParamList>();
 const BottomTabNavigator = () => {
   return (
-    <BottomTabTBarProvider>
+    <TabBarVisibilityProvider>
       <Navigator
         tabBar={(props) => <TabBar {...props} />}
         initialRouteName="BottomTabHome"
@@ -38,7 +30,7 @@ const BottomTabNavigator = () => {
         <Screen name="Settings" component={Settings} />
         <Screen name="Bookmarks" component={Bookmarks} />
       </Navigator>
-    </BottomTabTBarProvider>
+    </TabBarVisibilityProvider>
   );
 };
 
@@ -47,15 +39,9 @@ export default BottomTabNavigator;
 const TabBar = ({ navigation, state }: BottomTabBarProps) => {
   const { width } = useWindowDimensions();
   const { isTabBarVisible } = useTabBarContext();
-  const bottomY = useSharedValue(0);
   const animatedStyle = useAnimatedStyle(() => ({
     bottom: withSpring(isTabBarVisible.value ? 0 : -100),
   }));
-
-  // useEffect(() => {
-  //   bottomY.value = isTabBarVisible ? 0 : -100;
-  // }, [isTabBarVisible]);
-
   return (
     <Animated.View style={[styles.container, animatedStyle]}>
       <View style={[styles.tabBar, { width: width - 40 }]}>
@@ -87,12 +73,6 @@ const TabBar = ({ navigation, state }: BottomTabBarProps) => {
     </Animated.View>
   );
 };
-const icons = [
-  "home-outline",
-  "bookmark-outline",
-  "cart-outline",
-  "settings-outline",
-];
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
