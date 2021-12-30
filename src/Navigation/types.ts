@@ -1,4 +1,5 @@
 import { NavigatorScreenParams } from "@react-navigation/native"
+import { StoredMovies } from "../models/movie"
 
 export type RootParamList = {
     main: NavigatorScreenParams<BottomTabParamList>
@@ -6,7 +7,7 @@ export type RootParamList = {
 }
 
 export type SharedScreenParamList = {
-    bookDetails: {image: string; id: number, Director: string, title: string, description: string, rating: string}
+    bookDetails: StoredMovies
     Home: undefined;
 }
 export type BottomTabParamList = {

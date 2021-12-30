@@ -5,6 +5,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
+import { useDeviceOrientation } from "../../../../Hooks";
 
 interface Props {
   scrollY: Animated.SharedValue<number>;
@@ -12,8 +13,9 @@ interface Props {
 }
 
 const FAB = ({ onPress, scrollY }: Props) => {
+  const isOrientationPortrait = useDeviceOrientation() === "portrait";
   const animatedStyle = useAnimatedStyle(() => ({
-    right: withSpring(scrollY.value > 100 ? 20 : -400),
+    right: withSpring(scrollY.value > 100 && isOrientationPortrait ? 20 : -400),
   }));
   return (
     <Animated.View style={[styles.container, animatedStyle]}>

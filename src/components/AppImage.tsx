@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
 import Animated, {
   interpolateColor,
   useAnimatedStyle,
@@ -8,31 +7,34 @@ import Animated, {
 } from "react-native-reanimated";
 
 interface Props {
+  /**base64 string or url for the image */
   uri: string;
   width: number;
   height: number;
-  getURI?: (uri: string) => void;
 }
-const AppImage = ({ height, uri, width, getURI }: Props) => {
+const AppImage = ({ height, uri, width }: Props) => {
   const [isImageLoading, setIsImageLoading] = useState(true);
-  const loop = useSharedValue(0);
+  const loop = useSharedValue(0); // this will be used to control the animation of the image container
 
   const animatedContainerStyle = useAnimatedStyle(() => ({
-    backgroundColor: interpolateColor(loop.value, [0, 1], ["black", "white"]),
+    backgroundColor: interpolateColor(loop.value, [0, 1], ["black", "white"]), // animate the background color of the image container
   }));
 
   const animatedImageStyle = useAnimatedStyle(() => ({
-    opacity: withTiming(isImageLoading ? 0 : 1, { duration: 500 }),
+    opacity: withTiming(isImageLoading ? 0 : 1, { duration: 500 }), // fade in image when loaded
   }));
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    interval = setInterval(() => {
+    let animationInterval: NodeJS.Timeout;
+
+    //start animation when the component mounts
+    animationInterval = setInterval(() => {
       loop.value = withTiming(loop.value === 1 ? 0 : 1, { duration: 500 });
     }, 250);
 
-    !isImageLoading && clearInterval(interval);
-    return () => clearInterval(interval);
+    //stop animation when the image is loaded
+    !isImageLoading && clearInterval(animationInterval);
+    return () => clearInterval(animationInterval); //cleanup
   }, [isImageLoading]);
 
   return (
@@ -42,8 +44,6 @@ const AppImage = ({ height, uri, width, getURI }: Props) => {
         style={[{ width, height }, animatedImageStyle]}
         onLoad={(e) => {
           setIsImageLoading(false);
-          getURI && getURI(e.nativeEvent.source.uri);
-          console.log(e.nativeEvent.source.uri);
         }}
         resizeMethod="auto"
         resizeMode="cover"

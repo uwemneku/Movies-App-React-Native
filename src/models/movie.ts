@@ -25,3 +25,5 @@ export interface Movie {
     Website: string;
     Response: string;
 }
+
+export type StoredMovies =  Pick<Movie, 'Title' | 'Director' | 'imdbRating' | 'Plot' | 'Actors' | 'Poster' | 'imdbID'>

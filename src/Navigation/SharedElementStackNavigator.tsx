@@ -1,9 +1,8 @@
-import React, { useEffect, useRef } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { StyleSheet, View } from "react-native";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
-import { BookDetails, Home, Search } from "../Screens";
-import BottomTabNavigator from "./BottomTabNavigator";
-import { RootParamList, SharedScreenParamList } from "./types";
+import { BookDetails, Home } from "../Screens";
+import { SharedScreenParamList } from "./types";
 
 const { Navigator, Screen } =
   createSharedElementStackNavigator<SharedScreenParamList>();
@@ -15,7 +14,11 @@ const SharedElementStackNavigator = () => {
           name="bookDetails"
           component={BookDetails}
           sharedElements={({ params }) => [
-            { id: `image-${params.id}`, animation: "fade" },
+            {
+              id: `image-${params.imdbID}`,
+              animation: "fade-in",
+              resize: "none",
+            },
           ]}
         />
         <Screen name="Home" component={Home} />
