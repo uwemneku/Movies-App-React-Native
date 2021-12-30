@@ -2,11 +2,12 @@ import { Ionicons } from "@expo/vector-icons";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   FlatList,
   FlatListProps,
   Image,
+  RefreshControl,
   StyleSheet,
   Text,
   useWindowDimensions,
@@ -19,9 +20,11 @@ import Animated, {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { globalStyles } from "../../../components";
 import LoadingBooks from "../../../components/Loading";
+import { Movie as movieModel } from "../../../models/movie";
 import { BottomTabParamList, RootParamList } from "../../../Navigation/types";
 import api from "../../../services/api";
-import { FAB, NewBooks, PopularBooks } from "./components";
+import getRandomMovies from "../../../Utils/getRandomValuesFromArray";
+import { FAB, Movie, PreLoaders } from "./components";
 
 type Props = CompositeScreenProps<
   StackScreenProps<RootParamList>,
@@ -29,16 +32,15 @@ type Props = CompositeScreenProps<
 >;
 
 const AnimatedFlatList =
-  Animated.createAnimatedComponent<FlatListProps<number>>(FlatList);
+  Animated.createAnimatedComponent<FlatListProps<movieModel>>(FlatList);
 
+const t = getRandomMovies(28);
 const Home = ({ navigation }: Props) => {
-  const [popularBooks, setPopularBooks] = useState([
-    "Dune",
-    "Avengers",
-    "Matrix",
-    "Spider-man",
-  ]);
-  const { width } = useWindowDimensions();
+  const [titles, sett] = useState(getRandomMovies(28));
+  const { data, isLoading, isError, refetch, isFetching } =
+    api.useGetMoviesQuery(titles);
+  const [popularMovies, setPopularMovies] = useState<movieModel[]>([]);
+  const [newMovies, setNewMovies] = useState<movieModel[]>([]);
   const scrollY = useSharedValue(0);
   const scrollRef = useRef<FlatList>(null);
   const scrollHandler = useAnimatedScrollHandler({
@@ -46,6 +48,16 @@ const Home = ({ navigation }: Props) => {
       scrollY.value = contentOffset.y;
     },
   });
+
+  const onRefresh = () => sett(getRandomMovies(28));
+
+  useEffect(() => {
+    if (data) {
+      setPopularMovies(data.slice(0, 10));
+      setNewMovies(data.slice(10));
+    }
+  }, [data]);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={[styles.header]}>
@@ -75,14 +87,14 @@ const Home = ({ navigation }: Props) => {
                   Popular
                 </Text>
                 <FlatList
-                  data={popularBooks}
+                  data={popularMovies}
                   renderItem={({ item, index }) => (
-                    <PopularBooks {...{ index }} title={item} />
+                    <Movie data={item} variant="vertical" />
                   )}
                   ListEmptyComponent={() => (
-                    <LoadingBooks width={1000} height={150} />
+                    <PreLoaders count={3} direction="row" />
                   )}
-                  keyExtractor={(item) => item.toString()}
+                  keyExtractor={(item, index) => item.imdbID + index}
                   horizontal={true}
                   ItemSeparatorComponent={() => <View style={{ width: 30 }} />}
                   snapToInterval={156}
@@ -94,13 +106,21 @@ const Home = ({ navigation }: Props) => {
               </View>
             )}
             ref={scrollRef}
-            data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 12]}
-            renderItem={({ item }) => <NewBooks />}
-            keyExtractor={(item) => item.toString()}
+            data={newMovies}
+            renderItem={({ item, index }) => (
+              <Movie data={item} variant="horizontal" />
+            )}
+            ListEmptyComponent={() => (
+              <PreLoaders count={3} direction="column" />
+            )}
+            keyExtractor={(item, index) => item.imdbID + index}
             ItemSeparatorComponent={() => <View style={{ height: 30 }} />}
             onScroll={scrollHandler}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 300 }}
+            refreshControl={
+              <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
+            }
           />
         </View>
       </View>

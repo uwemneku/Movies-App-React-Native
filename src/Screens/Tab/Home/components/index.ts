@@ -1,3 +1,3 @@
-export {default as PopularBooks} from './PopularBooks';
-export {default as NewBooks} from './NewBooks';
+export {default as Movie} from './Movie';
 export {default as FAB} from './FAB';
+export {default as PreLoaders} from './PreLoaders';

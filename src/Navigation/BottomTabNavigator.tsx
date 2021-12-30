@@ -4,7 +4,7 @@ import {
 } from "@react-navigation/bottom-tabs";
 import React from "react";
 import { Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
-import { Bookmarks, Cart, Settings } from "../Screens";
+import { Bookmarks, Settings } from "../Screens";
 import { BottomTabParamList } from "./types";
 import { Ionicons } from "@expo/vector-icons";
 import SharedElementStackNavigator from "./SharedElementStackNavigator";
@@ -14,6 +14,7 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from "react-native-reanimated";
+import { useDeviceOrientation } from "../Hooks";
 
 const { Navigator, Screen } = createBottomTabNavigator<BottomTabParamList>();
 const BottomTabNavigator = () => {
@@ -25,10 +26,9 @@ const BottomTabNavigator = () => {
         screenOptions={{ headerShown: false }}
         sceneContainerStyle={{ backgroundColor: "#fff" }}
       >
-        <Screen name="BottomTabHome" component={SharedElementStackNavigator} />
-        <Screen name="Cart" component={Cart} />
-        <Screen name="Settings" component={Settings} />
         <Screen name="Bookmarks" component={Bookmarks} />
+        <Screen name="BottomTabHome" component={SharedElementStackNavigator} />
+        <Screen name="Settings" component={Settings} />
       </Navigator>
     </TabBarVisibilityProvider>
   );
@@ -39,11 +39,18 @@ export default BottomTabNavigator;
 const TabBar = ({ navigation, state }: BottomTabBarProps) => {
   const { width } = useWindowDimensions();
   const { isTabBarVisible } = useTabBarContext();
+  const isOrientationLandscape = useDeviceOrientation() === "landscape";
   const animatedStyle = useAnimatedStyle(() => ({
     bottom: withSpring(isTabBarVisible.value ? 0 : -100),
   }));
   return (
-    <Animated.View style={[styles.container, animatedStyle]}>
+    <Animated.View
+      style={[
+        styles.container,
+        { paddingBottom: isOrientationLandscape ? 0 : 10 },
+        animatedStyle,
+      ]}
+    >
       <View style={[styles.tabBar, { width: width - 40 }]}>
         {state.routes.map((route, index) => {
           const isFocused = index === state.index;
@@ -55,11 +62,9 @@ const TabBar = ({ navigation, state }: BottomTabBarProps) => {
               <Ionicons
                 name={
                   index === 0
-                    ? "home-outline"
-                    : index === 1
                     ? "bookmark-outline"
-                    : index === 2
-                    ? "cart-outline"
+                    : index === 1
+                    ? "home-outline"
                     : "settings-outline"
                 }
                 size={30}
@@ -76,7 +81,6 @@ const TabBar = ({ navigation, state }: BottomTabBarProps) => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
-    paddingBottom: 20,
     backgroundColor: "transparent",
     position: "absolute",
     alignItems: "center",
