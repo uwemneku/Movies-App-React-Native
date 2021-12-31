@@ -1,7 +1,13 @@
+import { StackScreenProps } from "@react-navigation/stack";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { useToggleTabBarVisibility } from "../../Hooks";
+import { SharedScreenParamList } from "../../Navigation/types";
 
-const Search = () => {
+type SearchScreenProps = StackScreenProps<SharedScreenParamList, "Search">;
+
+const Search = ({ navigation }: SearchScreenProps) => {
+  useToggleTabBarVisibility(navigation);
   return (
     <View>
       <Text></Text>

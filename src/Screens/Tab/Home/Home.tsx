@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { Portal } from "@gorhom/portal";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -18,18 +19,15 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { globalStyles } from "../../../components";
+import { globalStyles, TabBar } from "../../../components";
 import LoadingBooks from "../../../components/Loading";
 import { Movie as movieModel } from "../../../models/movie";
-import { BottomTabParamList, RootParamList } from "../../../Navigation/types";
+import { SharedScreenParamList } from "../../../Navigation/types";
 import api from "../../../services/api";
 import getRandomMovies from "../../../Utils/getRandomValuesFromArray";
 import { FAB, Movie, PreLoaders } from "./components";
 
-type Props = CompositeScreenProps<
-  StackScreenProps<RootParamList>,
-  BottomTabScreenProps<BottomTabParamList>
->;
+type Props = StackScreenProps<SharedScreenParamList, "Home">;
 
 const AnimatedFlatList =
   Animated.createAnimatedComponent<FlatListProps<movieModel>>(FlatList);
@@ -74,7 +72,7 @@ const Home = ({ navigation }: Props) => {
         <Ionicons
           name="ios-search-outline"
           size={30}
-          onPress={() => navigation.navigate("search")}
+          onPress={() => navigation.navigate("Search")}
         />
       </View>
 
@@ -130,6 +128,9 @@ const Home = ({ navigation }: Props) => {
           scrollRef.current?.scrollToOffset({ offset: 0, animated: true });
         }}
       />
+      <Portal hostName="TabBar">
+        <TabBar />
+      </Portal>
     </SafeAreaView>
   );
 };

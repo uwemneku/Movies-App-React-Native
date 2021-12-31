@@ -5,16 +5,22 @@ import { MainNavigator } from "./src/Navigation";
 import "react-native-gesture-handler";
 import { ApiProvider } from "@reduxjs/toolkit/dist/query/react";
 import api from "./src/services/api";
-import { BookmarkProvider } from "./src/Context";
+import { BookmarkProvider, TabBarVisibilityProvider } from "./src/Context";
+import { PortalHost, PortalProvider } from "@gorhom/portal";
 
 const App = () => {
   return (
     <ApiProvider api={api}>
-      <BookmarkProvider>
-        <NavigationContainer>
-          <MainNavigator />
-        </NavigationContainer>
-      </BookmarkProvider>
+      <PortalProvider>
+        <BookmarkProvider>
+          <TabBarVisibilityProvider>
+            <NavigationContainer>
+              <MainNavigator />
+              <PortalHost name="TabBar" />
+            </NavigationContainer>
+          </TabBarVisibilityProvider>
+        </BookmarkProvider>
+      </PortalProvider>
     </ApiProvider>
   );
 };

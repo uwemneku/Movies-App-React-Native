@@ -1,7 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useFocusEffect } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 import {
   Image,
   StyleSheet,
@@ -12,14 +11,13 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SharedElement } from "react-navigation-shared-element";
-import { useTabBarContext } from "../../Context/BottomTabBarVisibility/Context";
 import { globalStyles } from "../../components";
 import { SharedScreenParamList } from "../../Navigation/types";
-import { useBookmark, useDeviceOrientation } from "../../Hooks";
+import { useBookmark, useToggleTabBarVisibility } from "../../Hooks";
 
 type BookDetailsScreenProps = StackScreenProps<
   SharedScreenParamList,
-  "bookDetails"
+  "BookDetails"
 >;
 
 const BookDetails = ({ navigation, route }: BookDetailsScreenProps) => {
@@ -33,22 +31,8 @@ const BookDetails = ({ navigation, route }: BookDetailsScreenProps) => {
     imdbID,
   } = route.params;
   const [addBookmark, removeBookmark, isBookmarked] = useBookmark();
-  const { isTabBarVisible } = useTabBarContext();
-  const or = useDeviceOrientation();
-  useFocusEffect(
-    useCallback(() => {
-      isTabBarVisible.value = false;
-    }, [])
-  );
 
-  useEffect(() => {
-    const showTabBar = () => (isTabBarVisible.value = true);
-    navigation.addListener("beforeRemove", showTabBar);
-
-    return () => {
-      navigation.removeListener("beforeRemove", showTabBar);
-    };
-  }, []);
+  useToggleTabBarVisibility(navigation);
 
   const handleBackNavigation = () => navigation.goBack();
 

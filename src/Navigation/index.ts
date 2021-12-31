@@ -1,1 +1,1 @@
-export {default as MainNavigator} from './StackNavigator';
+export {default as MainNavigator} from './SharedElementStackNavigator';

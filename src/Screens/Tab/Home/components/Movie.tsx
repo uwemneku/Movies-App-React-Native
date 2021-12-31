@@ -15,35 +15,23 @@ import {
   Rating,
 } from "../../../../components";
 import { StoredMovies } from "../../../../models/movie";
-import {
-  BottomTabParamList,
-  RootParamList,
-  SharedScreenParamList,
-} from "../../../../Navigation/types";
+import { SharedScreenParamList } from "../../../../Navigation/types";
 import api from "../../../../services/api";
 
 //TODO: Fix the bug with nested navigation
-type HomeScreenNavigationProps = StackNavigationProp<
-  SharedScreenParamList,
-  "Home"
->;
-
-type Props1 = CompositeNavigationProp<
-  StackNavigationProp<RootParamList>,
-  StackNavigationProp<SharedScreenParamList>
->;
+type HomeScreenNavigationProps = StackNavigationProp<SharedScreenParamList>;
 
 interface Props {
   data: StoredMovies;
   variant?: "vertical" | "horizontal";
 }
 const Movie = ({ data, variant = "horizontal" }: Props) => {
-  const navigation = useNavigation<Props1>();
+  const navigation = useNavigation<HomeScreenNavigationProps>();
   const [isBookmarked, setIsBookmarked] = useState(false);
   const toggleBookmark = () => setIsBookmarked(!isBookmarked);
   const isHorizontal = variant === "horizontal";
   const handleNavigation = () => {
-    navigation.navigate("bookDetails", data);
+    navigation.navigate("BookDetails", data);
   };
 
   return (
