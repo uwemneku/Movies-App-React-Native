@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import {
   CompositeNavigationProp,
   useNavigation,
@@ -14,6 +13,7 @@ import {
   Loading,
   Rating,
 } from "../../../../components";
+import { useBookmark } from "../../../../Hooks";
 import { StoredMovies } from "../../../../models/movie";
 import { SharedScreenParamList } from "../../../../Navigation/types";
 import api from "../../../../services/api";
@@ -27,8 +27,9 @@ interface Props {
 }
 const Movie = ({ data, variant = "horizontal" }: Props) => {
   const navigation = useNavigation<HomeScreenNavigationProps>();
-  const [isBookmarked, setIsBookmarked] = useState(false);
-  const toggleBookmark = () => setIsBookmarked(!isBookmarked);
+  const [addBookmark, removeBookmark, isBookmarked] = useBookmark(data.imdbID);
+  const toggleBookmark = () =>
+    isBookmarked ? removeBookmark() : addBookmark(data);
   const isHorizontal = variant === "horizontal";
   const handleNavigation = () => {
     navigation.navigate("BookDetails", data);

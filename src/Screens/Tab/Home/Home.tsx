@@ -1,9 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Portal } from "@gorhom/portal";
-import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import { CompositeScreenProps } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   FlatList,
   FlatListProps,
@@ -11,7 +9,6 @@ import {
   RefreshControl,
   StyleSheet,
   Text,
-  useWindowDimensions,
   View,
 } from "react-native";
 import Animated, {
@@ -20,7 +17,6 @@ import Animated, {
 } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { globalStyles, TabBar } from "../../../components";
-import LoadingBooks from "../../../components/Loading";
 import { Movie as movieModel } from "../../../models/movie";
 import { SharedScreenParamList } from "../../../Navigation/types";
 import api from "../../../services/api";

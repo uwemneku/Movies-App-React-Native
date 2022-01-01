@@ -5,7 +5,6 @@ export default function getRandomMovies(count: number) {
     const randomArray = [];
     for (let i = 0; i < count; i++) {
         const randomIndex = Math.floor(Math.random() * array.length);
-        console.log(randomIndex);
         randomArray.push(array[randomIndex]);
         array.splice(randomIndex, 1);
     }

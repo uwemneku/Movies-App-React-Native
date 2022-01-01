@@ -8,12 +8,20 @@ import {
   TouchableNativeFeedback,
   View,
 } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SharedElement } from "react-navigation-shared-element";
 import { globalStyles } from "../../components";
 import { SharedScreenParamList } from "../../Navigation/types";
 import { useBookmark, useToggleTabBarVisibility } from "../../Hooks";
+import Animated, {
+  Extrapolate,
+  interpolate,
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 type BookDetailsScreenProps = StackScreenProps<
   SharedScreenParamList,
@@ -30,11 +38,23 @@ const BookDetails = ({ navigation, route }: BookDetailsScreenProps) => {
     Title,
     imdbID,
   } = route.params;
-  const [addBookmark, removeBookmark, isBookmarked] = useBookmark();
-
+  const [addBookmark, removeBookmark, isBookmarked] = useBookmark(imdbID);
   useToggleTabBarVisibility(navigation);
-
   const handleBackNavigation = () => navigation.goBack();
+
+  const handleBookmarkPress = () => {
+    isBookmarked
+      ? removeBookmark()
+      : addBookmark({
+          Actors,
+          Director,
+          Plot,
+          Poster: uri,
+          imdbRating,
+          Title,
+          imdbID,
+        });
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white", padding: 20 }}>
@@ -47,7 +67,8 @@ const BookDetails = ({ navigation, route }: BookDetailsScreenProps) => {
       >
         <Ionicons name="arrow-back" size={30} onPress={handleBackNavigation} />
       </View>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Text>{isBookmarked ? "yes" : "no"}</Text>
         <View style={styles.flexItem}>
           <SharedElement id={`image-${imdbID}`}>
             <View>
@@ -75,17 +96,16 @@ const BookDetails = ({ navigation, route }: BookDetailsScreenProps) => {
         </View>
         <View style={{ flex: 1 }}>
           <Text style={[globalStyles.author, styles.description]}>{Plot}</Text>
-          <TouchableNativeFeedback
-            background={TouchableNativeFeedback.Ripple("white", false)}
-            onPress={() => addBookmark(route.params)}
+          <TouchableOpacity
+            onPress={() => handleBookmarkPress()}
+            activeOpacity={0.8}
+            style={[styles.button]}
           >
-            <View style={styles.button}>
-              <Text style={{ color: "white", fontSize: 20 }}>
-                Add to bookmarks{" "}
-                <Ionicons name="bookmarks-outline" color={"white"} size={20} />{" "}
-              </Text>
-            </View>
-          </TouchableNativeFeedback>
+            <Text style={{ color: "white", fontSize: 20 }}>
+              {isBookmarked ? "Remove from" : "Add to"} bookmarks{" "}
+              <Ionicons name="bookmarks-outline" color={"white"} size={20} />{" "}
+            </Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
