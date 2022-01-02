@@ -7,9 +7,6 @@ import { SharedScreenParamList } from "./types";
 const { Navigator, Screen } =
   createSharedElementStackNavigator<SharedScreenParamList>();
 const SharedElementStackNavigator = () => {
-  useEffect(() => {
-    console.log("useEffect");
-  });
   return (
     <View style={{ flex: 1 }}>
       <Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>

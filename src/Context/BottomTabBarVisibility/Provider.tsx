@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 import TabBarContext from "./Context";
 
-const Provider: FC = ({ children }) => {
+const BottomTabTarProvider: FC = ({ children }) => {
   //   const [isTabBarVisible, setIsTabBarVisible] = useState(true);
   const isTabBarVisible = useSharedValue(true);
   return (
@@ -13,6 +13,6 @@ const Provider: FC = ({ children }) => {
   );
 };
 
-export default Provider;
+export default BottomTabTarProvider;
 
 const styles = StyleSheet.create({});

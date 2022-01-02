@@ -52,4 +52,4 @@ const AppImage = ({ height, uri, width }: Props) => {
   );
 };
 
-export default AppImage;
+export default React.memo(AppImage);

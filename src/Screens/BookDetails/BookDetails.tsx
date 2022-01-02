@@ -68,7 +68,6 @@ const BookDetails = ({ navigation, route }: BookDetailsScreenProps) => {
         <Ionicons name="arrow-back" size={30} onPress={handleBackNavigation} />
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Text>{isBookmarked ? "yes" : "no"}</Text>
         <View style={styles.flexItem}>
           <SharedElement id={`image-${imdbID}`}>
             <View>
@@ -84,7 +83,11 @@ const BookDetails = ({ navigation, route }: BookDetailsScreenProps) => {
           <Text
             style={[
               globalStyles.heading,
-              { textAlign: "center", marginVertical: 10 },
+              {
+                textAlign: "center",
+                marginVertical: 10,
+                fontSize: Title.length > 20 ? 20 : 30,
+              },
             ]}
           >
             {Title}

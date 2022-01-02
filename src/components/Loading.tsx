@@ -30,6 +30,6 @@ const LoadingBooks = ({ height, width }: Props) => {
   return <Animated.View style={[{ width, height }, animatedContainerStyle]} />;
 };
 
-export default LoadingBooks;
+export default React.memo(LoadingBooks);
 
 const styles = StyleSheet.create({});

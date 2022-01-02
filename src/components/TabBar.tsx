@@ -108,4 +108,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TabBar;
+export default React.memo(TabBar);

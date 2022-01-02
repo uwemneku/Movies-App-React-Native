@@ -32,7 +32,7 @@ const reducer: Reducer<StoredMovies[], BookmarkDispatchAction> = (
   }
 };
 
-const Provider: FC = ({ children }) => {
+const BookmarkProvider: FC = ({ children }) => {
   const [bookmarks, dispatch] = useReducer(reducer, []);
   useEffect(() => {
     getCacheData().then((data) => {
@@ -48,6 +48,6 @@ const Provider: FC = ({ children }) => {
   );
 };
 
-export default Provider;
+export default BookmarkProvider;
 
 const styles = StyleSheet.create({});
